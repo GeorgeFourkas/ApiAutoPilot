@@ -12,10 +12,11 @@ trait HasPivotKeys
                 foreach ($id as $key => $indiv) {
                     $vals[$key] = $indiv;
                 }
-            }else{
+            } else {
                 $vals[] = $id;
             }
         }
+
         return $vals;
     }
 }

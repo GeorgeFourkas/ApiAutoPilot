@@ -1,4 +1,5 @@
 <?php
+
 return [
     'index' => [
         'exclude' => [
@@ -8,22 +9,22 @@ return [
     'show' => [
         'exclude' => [
 
-        ]
+        ],
     ],
     'create' => [
         'exclude' => [
 
-        ]
+        ],
     ],
     'update' => [
         'exclude' => [
 
-        ]
+        ],
     ],
     'delete' => [
         'exclude' => [
 
-        ]
+        ],
     ],
 
 ];

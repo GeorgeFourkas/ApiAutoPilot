@@ -2,9 +2,9 @@
 
 namespace ApiAutoPilot\ApiAutoPilot\Tests;
 
+use ApiAutoPilot\ApiAutoPilot\ApiAutoPilotServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use ApiAutoPilot\ApiAutoPilot\ApiAutoPilotServiceProvider;
 
 class TestCase extends Orchestra
 {

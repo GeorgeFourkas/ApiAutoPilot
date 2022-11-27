@@ -6,7 +6,6 @@ use ApiAutoPilot\ApiAutoPilot\Exceptions\Handler\ApiAutoPilotExceptionHandler;
 use ApiAutoPilot\ApiAutoPilot\Http\Requests\AttachDetachSyncRequest;
 use ApiAutoPilot\ApiAutoPilot\ManyToManyRelationshipHandler;
 use ApiAutoPilot\ApiAutoPilot\ModelResolver;
-use ApiAutoPilot\ApiAutoPilot\Policies\PolicyResolver;
 use ApiAutoPilot\ApiAutoPilot\SearchResolver;
 use ApiAutoPilot\ApiAutoPilot\Traits\HasPolicies;
 use ApiAutoPilot\ApiAutoPilot\Traits\HasResponse;
@@ -15,7 +14,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Arr;
-
 
 class ApiAutoPilotController extends Controller
 {
@@ -38,10 +36,11 @@ class ApiAutoPilotController extends Controller
     {
         $model = $request->get('modelClass');
         $this->callPolicy('viewAny', $model::class, $modelName);
-        $pagination = config('autopilot-api.settings.' . $model::class . '.pagination');
+        $pagination = config('autopilot-api.settings.'.$model::class.'.pagination');
         if ($pagination) {
             return response()->json($model->paginate($pagination));
         }
+
         return response()->json($model->all());
     }
 
@@ -118,6 +117,7 @@ class ApiAutoPilotController extends Controller
     public function detach(AttachDetachSyncRequest $request, $modelName, $id, $second, ManyToManyRelationshipHandler $handler): JsonResponse
     {
         $modelClass = $request->get('modelClass');
+
         return $handler
             ->setRequest($request)
             ->setModelClass($modelClass)
@@ -133,6 +133,7 @@ class ApiAutoPilotController extends Controller
     public function sync(AttachDetachSyncRequest $request, $modelName, $id, $second, ManyToManyRelationshipHandler $handler): JsonResponse
     {
         $modelClass = $request->get('modelClass');
+
         return $handler
             ->setRequest($request)
             ->setModelClass($modelClass)
@@ -140,13 +141,10 @@ class ApiAutoPilotController extends Controller
             ->verifyManyToManyExists($second)
             ->sync(($modelClass)::findOrFail($id))
             ->responseToDetach();
-
     }
 
     public function createdRelated(Request $request, $modelName, $id, $relationship, ModelResolver $resolver)
     {
-
-
     }
 
     public function getWithRelation(Request $request, $modelName, $id, $relation): JsonResponse
@@ -157,8 +155,7 @@ class ApiAutoPilotController extends Controller
         if (Arr::exists($request->get('relationships'), $relation)) {
             return response()->json($model->load($relation));
         }
+
         return $this->notFoundResponse();
     }
-
-
 }

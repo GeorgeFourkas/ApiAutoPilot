@@ -8,7 +8,6 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ApiAutoPilotExceptionHandler extends ExceptionHandler
 {
-
     /**
      * A list of exception types with their corresponding custom log levels.
      *
@@ -50,8 +49,8 @@ class ApiAutoPilotExceptionHandler extends ExceptionHandler
                 return response()->json([
                     'error' => [
                         'error_message' => 'record not found',
-                        'http_response_code' => 404
-                    ]
+                        'http_response_code' => 404,
+                    ],
                 ], 404);
             }
         });
@@ -59,7 +58,7 @@ class ApiAutoPilotExceptionHandler extends ExceptionHandler
         $this->renderable(function (MethodNotAllowedHttpException $e) {
             return response()->json(
                 [
-                    'error' => 'method not allowed'
+                    'error' => 'method not allowed',
                 ], 404);
         });
     }

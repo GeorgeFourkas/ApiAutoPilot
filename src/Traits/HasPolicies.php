@@ -19,9 +19,9 @@ trait HasPolicies
         $policyResolver = new PolicyResolver($modelNamespace, $modelName);
 
         if (Auth::check() && $policyResolver->policyExists()) {
-            if (!is_null($model)){
+            if (! is_null($model)) {
                 $this->authorize($action, $model);
-            }else{
+            } else {
                 $this->authorize($action, $modelNamespace);
             }
         }

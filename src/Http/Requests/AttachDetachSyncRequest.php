@@ -25,7 +25,7 @@ class AttachDetachSyncRequest extends FormRequest
     {
         return [
             'ids' => 'required|array',
-            'ids.*' => 'integer'
+            'ids.*' => 'integer',
         ];
     }
 }

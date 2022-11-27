@@ -25,7 +25,7 @@ class ApiAutoPilotServiceProvider extends PackageServiceProvider
             ->name('apiautopilot')
             ->hasConfigFile()
             ->hasCommands([
-                InstallationCommand::class
+                InstallationCommand::class,
             ]);
 
         $this
@@ -40,6 +40,7 @@ class ApiAutoPilotServiceProvider extends PackageServiceProvider
     {
         $this->app->make(Router::class)->aliasMiddleware('ModelSearch', ModelSearch::class);
         $this->app->make(Router::class)->aliasMiddleware('enforceJson', SetApplicationJsonHeader::class);
+
         return $this;
     }
 

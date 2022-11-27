@@ -2,7 +2,6 @@
 
 namespace ApiAutoPilot\ApiAutoPilot\Traits;
 
-use ErrorException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use ReflectionClass;
@@ -10,14 +9,12 @@ use ReflectionMethod;
 
 trait HasModelRelationships
 {
-
     public function getRelationships(Model $model): array
     {
         $relationships = [];
 
-        foreach((new ReflectionClass($model))->getMethods(ReflectionMethod::IS_PUBLIC) as $method)
-        {
-            if ($method->class != get_class($model) || !empty($method->getParameters()) || $method->getName() == __FUNCTION__) {
+        foreach ((new ReflectionClass($model))->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
+            if ($method->class != get_class($model) || ! empty($method->getParameters()) || $method->getName() == __FUNCTION__) {
                 continue;
             }
             try {
@@ -26,7 +23,7 @@ trait HasModelRelationships
                     $relationships[$method->getName()] = [
                         'name' => $method->getName(),
                         'type' => (new ReflectionClass($return))->getShortName(),
-                        'model' => (new ReflectionClass($return->getRelated()))->getName()
+                        'model' => (new ReflectionClass($return->getRelated()))->getName(),
                     ];
                 }
             } catch(\ReflectionException $e) {
@@ -36,5 +33,4 @@ trait HasModelRelationships
 
         return $relationships;
     }
-
 }

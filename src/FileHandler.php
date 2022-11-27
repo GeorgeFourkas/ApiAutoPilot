@@ -7,24 +7,24 @@ use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
-
 class FileHandler
 {
     protected array $urls = [];
+
     protected string $urlColumn;
+
     protected Request $request;
+
     protected Model $model;
+
     protected bool $hasFile = false;
 
     /**
-     * @param UploadedFile|array $files
-     * @param Request $request
-     * @param Model $model
+     * @param  UploadedFile|array  $files
+     * @param  Request  $request
+     * @param  Model  $model
      * @return array
-     *
-     *
      */
-
     public function __construct(Model $model, string $urlColumn)
     {
         $this->model = $model;
@@ -44,6 +44,7 @@ class FileHandler
                 $values[$key] = $this->addToArray($key, $obj);
             }
         }
+
         return $values;
     }
 
@@ -55,6 +56,7 @@ class FileHandler
         } else {
             $values = $item;
         }
+
         return $values;
     }
 
@@ -62,7 +64,8 @@ class FileHandler
     {
         $destination = $this->getModelSaveDirectory($this->model);
         $url = Storage::putFile($destination, $file);
-        return str_replace("public", "/storage", $url);
+
+        return str_replace('public', '/storage', $url);
     }
 
     protected function execFileModelHook($file): array
@@ -70,6 +73,7 @@ class FileHandler
         if (method_exists($this->model, 'setAdditionalFileData')) {
             return $this->model->setAdditionalFileData($file);
         }
+
         return [];
     }
 
@@ -84,6 +88,7 @@ class FileHandler
                 $files[$key] = $this->allFiles($index);
             }
         }
+
         return $files;
     }
 
@@ -97,6 +102,7 @@ class FileHandler
         if (property_exists($model, 'fileDestination')) {
             return $model->fileDestination;
         }
+
         return '/public/aap';
     }
 

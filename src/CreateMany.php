@@ -8,10 +8,8 @@ use ApiAutoPilot\ApiAutoPilot\Traits\HasResponse;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
-
 class CreateMany implements CreateModel
 {
-
     use HasResponse;
     use HasPolicies;
 
@@ -21,25 +19,29 @@ class CreateMany implements CreateModel
      */
 
     protected Relation $related;
-    protected Model $model;
-    protected Request $request;
 
+    protected Model $model;
+
+    protected Request $request;
 
     public function setRelated(Relation $related): static
     {
         $this->related = $related;
+
         return $this;
     }
 
     public function setModel(Model $model): static
     {
         $this->model = $model;
+
         return $this;
     }
 
     public function setRequest(Request $request): static
     {
         $this->request = $request;
+
         return $this;
     }
 
@@ -51,11 +53,12 @@ class CreateMany implements CreateModel
     {
         $urlColumn = FileUrlResolver::findUrlTableColumn($this->model);
         if ($this->isArrayOfIds()) {
-            if (!$this->isEligibleForAttaching()) {
+            if (! $this->isEligibleForAttaching()) {
                 return ['error' => ['error_message' => 'the endpoint doesnt exist']];
             }
             $created = $this->createMainModel();
             $created->{$this->related->getFunctionName()}()->attach($this->request->{$this->related->getFunctionName()});
+
             return $created->load($this->related->getFunctionName())->toArray();
         } else {
             $requestData = $this->getRequestData();
@@ -80,20 +83,22 @@ class CreateMany implements CreateModel
                     ->getFunctionName()}()
                     ->createMany($values);
             }
+
             return $created->load($this->related->getFunctionName())->toArray();
         }
     }
 
     protected function isArrayOfIds(): bool
     {
-        if (!is_array($this->request->{$this->related->getFunctionName()})) {
+        if (! is_array($this->request->{$this->related->getFunctionName()})) {
             return false;
         }
         foreach ($this->request->{$this->related->getFunctionName()} ?? [] as $item) {
-            if (!is_int($item)) {
+            if (! is_int($item)) {
                 return false;
             }
         }
+
         return true;
     }
 
@@ -122,6 +127,4 @@ class CreateMany implements CreateModel
             ? $this->request->{$this->related->getFunctionName()}
             : [$this->request->{$this->related->getFunctionName()}];
     }
-
-
 }
