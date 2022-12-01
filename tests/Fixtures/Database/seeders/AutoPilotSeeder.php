@@ -8,8 +8,6 @@ use Illuminate\Database\Seeder;
 
 class AutoPilotSeeder extends Seeder
 {
-
-
     public function run()
     {
         User::factory(5)->create();

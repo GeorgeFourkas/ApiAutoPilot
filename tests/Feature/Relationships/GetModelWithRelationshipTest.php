@@ -6,5 +6,4 @@ use ApiAutoPilot\ApiAutoPilot\Tests\TestCase;
 
 class GetModelWithRelationshipTest extends TestCase
 {
-
 }

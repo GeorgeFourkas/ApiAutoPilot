@@ -32,7 +32,6 @@ class ManyToManyRelationshipHandler
      */
     protected Model $model;
 
-
     /**
      * @var int
      */
@@ -42,7 +41,7 @@ class ManyToManyRelationshipHandler
     use HasPivotKeys;
 
     /**
-     * @param Request $aRequest
+     * @param  Request  $aRequest
      * @return $this
      */
     public function setRequest(Request $aRequest): static
@@ -55,7 +54,7 @@ class ManyToManyRelationshipHandler
     }
 
     /**
-     * @param Model $aModel
+     * @param  Model  $aModel
      * @return $this
      */
     public function setModelClass(Model $aModel): static
@@ -77,7 +76,7 @@ class ManyToManyRelationshipHandler
     }
 
     /**
-     * @param array $someRelations
+     * @param  array  $someRelations
      * @return void
      */
     protected function setModelRelations(array $someRelations): void
@@ -112,7 +111,7 @@ class ManyToManyRelationshipHandler
     }
 
     /**
-     * @param Model $model
+     * @param  Model  $model
      * @return $this
      */
     public function detachFrom(Model $model): static

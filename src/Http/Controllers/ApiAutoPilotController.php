@@ -34,7 +34,6 @@ class ApiAutoPilotController extends Controller
      */
     public function index(Request $request, $modelName): JsonResponse
     {
-
         $model = $request->get('modelClass');
         $this->callPolicy('viewAny', $model::class, $modelName);
         $pagination = config('apiautopilot.settings.'.$model::class.'.pagination');

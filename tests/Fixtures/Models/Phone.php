@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Phone extends Model
 {
     protected $fillable = [
-      'number', 'provider_logo', 'user_id'
+        'number', 'provider_logo', 'user_id',
     ];
 
     public function user()
@@ -16,8 +16,8 @@ class Phone extends Model
         return $this->belongsTo(User::class);
     }
 
-    protected static function newFactory(){
+    protected static function newFactory()
+    {
         return PhoneFactory::new();
     }
-
 }

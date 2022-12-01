@@ -18,7 +18,7 @@ class GetAllOfAModelTest extends TestCase
 
     public function test_it_paginates_when_set_in_config()
     {
-        config()->set('apiautopilot.settings.' . Post::class, ['pagination' => 1]);
+        config()->set('apiautopilot.settings.'.Post::class, ['pagination' => 1]);
         $response = $this->get('/api/aap/post');
         $response->assertSee('Next');
     }
@@ -28,6 +28,4 @@ class GetAllOfAModelTest extends TestCase
         $this->get('/api/aap/something_not_existing')
             ->assertNotFound();
     }
-
-
 }

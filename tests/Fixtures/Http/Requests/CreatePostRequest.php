@@ -6,7 +6,6 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class CreatePostRequest extends FormRequest
 {
-
     public function authorize()
     {
         return true;
@@ -17,8 +16,7 @@ class CreatePostRequest extends FormRequest
         return [
             'body' => 'required',
             'title' => 'required',
-            'featured_image_url' => 'required'
+            'featured_image_url' => 'required',
         ];
     }
-
 }

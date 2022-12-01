@@ -5,7 +5,6 @@ namespace ApiAutoPilot\ApiAutoPilot;
 use ApiAutoPilot\ApiAutoPilot\Commands\InstallationCommand;
 use ApiAutoPilot\ApiAutoPilot\Http\Middleware\ModelSearch;
 use ApiAutoPilot\ApiAutoPilot\Http\Middleware\SetApplicationJsonHeader;
-use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Routing\Router;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
@@ -29,8 +28,6 @@ class ApiAutoPilotServiceProvider extends PackageServiceProvider
                 InstallationCommand::class,
             ]);
 
-
-
         $this
             ->configureMiddleware()
             ->configureFacades();
@@ -49,7 +46,7 @@ class ApiAutoPilotServiceProvider extends PackageServiceProvider
 
     public function registeringPackage()
     {
-        $this->app['router']->aliasMiddleware('modelSearch' , ModelSearch::class);
+        $this->app['router']->aliasMiddleware('modelSearch', ModelSearch::class);
     }
 
     protected function configureFacades(): void

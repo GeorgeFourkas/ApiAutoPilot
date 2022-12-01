@@ -8,5 +8,4 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 class SearchTest extends TestCase
 {
     use RefreshDatabase;
-
 }

@@ -26,7 +26,6 @@ class ApiAutoPilot
                 Route::delete('{modelName}/{id}', [ApiAutoPilotController::class, 'delete'])
                     ->name('delete');
 
-
                 Route::get('/search/query/{modelName}', [ApiAutoPilotController::class, 'search'])
                     ->name('search');
                 Route::get('{modelName}/{id}/{relation}', [ApiAutoPilotController::class, 'getWithRelation'])
