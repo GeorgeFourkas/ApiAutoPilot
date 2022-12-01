@@ -118,7 +118,7 @@ class CreateMany implements CreateModel
         $urlColumn = FileUrlResolver::findUrlTableColumn($relatedModel);
         $handler = new FileHandler($relatedModel, $urlColumn);
         $values = $handler->replaceUploadedFileToUrl($requestData);
-        if ($handler->foundFile()) {
+        if ($handler->requestHasFile()) {
             $values = $this->flattenArray($values, $urlColumn);
         }
         $this->saveRelatedModel($mainModel, $values);
