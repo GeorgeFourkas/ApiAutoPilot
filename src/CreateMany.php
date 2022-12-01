@@ -57,7 +57,7 @@ class CreateMany implements CreateModel
      */
     public function create(): array
     {
-        if ($this->isArrayOfIds() && !$this->isEligibleForAttaching()) {
+        if ($this->isArrayOfIds() && ! $this->isEligibleForAttaching()) {
             throw new ModelNotEligibleForAttach();
         }
         $mainModel = $this->createMainModel();
@@ -76,11 +76,11 @@ class CreateMany implements CreateModel
 
     protected function isArrayOfIds(): bool
     {
-        if (!is_array($this->request->{$this->related->getFunctionName()})) {
+        if (! is_array($this->request->{$this->related->getFunctionName()})) {
             return false;
         }
         foreach ($this->request->{$this->related->getFunctionName()} ?? [] as $item) {
-            if (!is_int($item)) {
+            if (! is_int($item)) {
                 return false;
             }
         }
@@ -133,10 +133,11 @@ class CreateMany implements CreateModel
 //            $created->{$this->related
 //                ->getFunctionName()}()
 //                ->createMany($values);
-            foreach ($values as $key => $value)
+            foreach ($values as $key => $value) {
                 $created
                     ->{$this->related->getFunctionName()}()
                     ->create($value);
+            }
         }
     }
 
@@ -149,7 +150,7 @@ class CreateMany implements CreateModel
 
     protected function flattenArray(array $multiDimentionalArray, string $urlColumn): array
     {
-        if (!$this->request->file()) {
+        if (! $this->request->file()) {
             return $multiDimentionalArray;
         }
 
@@ -159,7 +160,7 @@ class CreateMany implements CreateModel
                 if (isset($value[$urlColumn])) {
                     $fileData = $value[$urlColumn];
                     unset($value[$urlColumn]);
-                    if (!is_array($fileData)){
+                    if (! is_array($fileData)) {
                         $fileData = [$urlColumn => $fileData];
                     }
                     $values = array_merge($fileData, $value);

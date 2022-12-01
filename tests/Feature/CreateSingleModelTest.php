@@ -59,5 +59,4 @@ class CreateSingleModelTest extends TestCase
         ]);
         $response->assertUnprocessable();
     }
-
 }

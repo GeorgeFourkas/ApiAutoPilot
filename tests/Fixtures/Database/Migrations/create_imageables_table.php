@@ -9,14 +9,13 @@ use Illuminate\Support\Facades\Schema;
 
 return new class() extends Migration
 {
-
     public function up()
     {
-        Schema::create('imageables', function (Blueprint $table){
-           $table->id();
-           $table->foreignIdFor(Image::class);
-           $table->morphs('imageable');
-           $table->timestamps();
+        Schema::create('imageables', function (Blueprint $table) {
+            $table->id();
+            $table->foreignIdFor(Image::class);
+            $table->morphs('imageable');
+            $table->timestamps();
         });
     }
 };
