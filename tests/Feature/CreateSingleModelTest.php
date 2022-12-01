@@ -60,9 +60,4 @@ class CreateSingleModelTest extends TestCase
         $response->assertUnprocessable();
     }
 
-    public function test_it_invokes_the_form_request_class_that_was_set_in_the_model_class()
-    {
-        $this->postJson('/api/aap/post', [])
-            ->assertUnprocessable();
-    }
 }

@@ -47,7 +47,7 @@ class SearchResolver
     {
         foreach ($this->queries as $column => $value) {
             $operator = $this->determineOperator(array_key_first($value));
-            $this->filters[] = [$column, $operator, $operator === 'LIKE' ? '%'.current(array_values($value)).'%' : current(array_values($value))];
+            $this->filters[] = [$column, $operator, current(array_values($value))];
         }
 
         return $this;

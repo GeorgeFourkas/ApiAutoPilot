@@ -7,6 +7,8 @@ use ApiAutoPilot\ApiAutoPilot\Tests\Fixtures\Database\Factories\PostFactory;
 use ApiAutoPilot\ApiAutoPilot\Tests\Fixtures\Http\Requests\CreatePostRequest;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Http\UploadedFile;
 
 class Post extends Model implements FileManipulation
@@ -33,9 +35,14 @@ class Post extends Model implements FileManipulation
         return $this->belongsTo(User::class);
     }
 
-    public function tags()
+    public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class);
+    }
+
+    public function images(): MorphToMany
+    {
+        return $this->morphToMany(Image::class, 'imageable');
     }
 
     protected static function newFactory()

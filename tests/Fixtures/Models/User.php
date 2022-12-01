@@ -35,6 +35,10 @@ class User extends Authenticatable
         return $this->hasOne(Phone::class);
     }
 
+    public function images()
+    {
+        return $this->morphToMany(Image::class, 'imageable');
+    }
     protected static function newFactory()
     {
         return UserFactory::new();

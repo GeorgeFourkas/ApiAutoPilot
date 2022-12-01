@@ -2,6 +2,7 @@
 
 namespace ApiAutoPilot\ApiAutoPilot\Tests\Feature\Relationships;
 
+use ApiAutoPilot\ApiAutoPilot\Tests\Fixtures\Models\Image;
 use ApiAutoPilot\ApiAutoPilot\Tests\Fixtures\Models\Phone;
 use ApiAutoPilot\ApiAutoPilot\Tests\Fixtures\Models\Post;
 use ApiAutoPilot\ApiAutoPilot\Tests\Fixtures\Models\Tag;
@@ -23,7 +24,7 @@ class CreateModelWithRelatedTest extends TestCase
 
     public function test_it_can_create_a_user_with_many_posts_containing_many_images_in_the_request()
     {
-        config()->set('apiautopilot.settings.'.Post::class.'.database_file_url', 'featured_image_url');
+        config()->set('apiautopilot.settings.' . Post::class . '.database_file_url', 'featured_image_url');
 
         Storage::fake('public');
         $file = UploadedFile::fake()->image('avatar.jpg');
@@ -75,7 +76,7 @@ class CreateModelWithRelatedTest extends TestCase
 
     public function test_it_can_create_a_user_with_with_phone_without_an_uploaded_image_in_the_request_json_body()
     {
-        config()->set('apiautopilot.settings.'.Phone::class.'.database_file_url', 'provider_logo');
+        config()->set('apiautopilot.settings.' . Phone::class . '.database_file_url', 'provider_logo');
         $this->postJson('/api/aap/user/phone', [
             'name' => 'george fourkas',
             'email' => 'email@somewhere.com',
@@ -91,9 +92,9 @@ class CreateModelWithRelatedTest extends TestCase
      *
      * Post <<--->> Tag
      */
-    public function it_can_create_post_with_many_tags_and_attach_it_to_the_table()
+    public function test_it_can_create_post_with_many_tags_and_attach_it_to_the_table()
     {
-        config()->set('apiautopilot.settings.'.Post::class.'.database_file_url', 'featured_image_url');
+        config()->set('apiautopilot.settings.' . Post::class . '.database_file_url', 'featured_image_url');
         Storage::fake('aap');
         $file = UploadedFile::fake()->image('avatar.jpg');
 
@@ -107,8 +108,9 @@ class CreateModelWithRelatedTest extends TestCase
                 ['name' => 'web dev'],
                 ['name' => 'programming'],
             ],
-        ]);
-        $this->assertDatabaseCount('posts', 1);
+        ])->assertOk();
+        $this->assertDatabaseCount('posts', 16);
+        $this->assertDatabaseCount('tags', 3);
         $this->assertDatabaseCount('post_tag', 3);
     }
 
@@ -118,7 +120,7 @@ class CreateModelWithRelatedTest extends TestCase
         Tag::create(['name' => 'tag 2']);
         Tag::create(['name' => 'tag 3']);
 
-        config()->set('apiautopilot.settings.'.Post::class.'.database_file_url', 'featured_image_url');
+        config()->set('apiautopilot.settings.' . Post::class . '.database_file_url', 'featured_image_url');
         Storage::fake('aap');
         $file = UploadedFile::fake()->image('avatar.jpg');
 
@@ -133,7 +135,7 @@ class CreateModelWithRelatedTest extends TestCase
 
     public function test_it_can_create_tag_and_assign_all_posts()
     {
-        config()->set('apiautopilot.settings.'.Post::class.'.database_file_url', 'featured_image_url');
+        config()->set('apiautopilot.settings.' . Post::class . '.database_file_url', 'featured_image_url');
         Storage::fake('aap');
         $file1 = UploadedFile::fake()->image('avatar.jpg');
         $file2 = UploadedFile::fake()->image('avatar.jpg');
@@ -154,7 +156,8 @@ class CreateModelWithRelatedTest extends TestCase
                     'featured_image_url' => $file2,
                     'user_id' => User::all()->first()->id,
 
-                ], [
+                ],
+                [
                     'title' => 'post_title_3',
                     'body' => 'body of the post',
                     'featured_image_url' => $file3,
@@ -170,9 +173,80 @@ class CreateModelWithRelatedTest extends TestCase
 
     public function test_it_throws_exception_when_trying_to_many_to_many_operations_with_not_eliglble_models()
     {
-        $response = $this->postJson('/api/user/post', [
+        $this->postJson('/api/user/posts', [
             'name' => 'aname',
-            'user',
+            'email' => 'email@somewhere.com',
+            'password' => '123',
+            'posts' => [1, 2, 3]
+        ])->assertNotFound();
+        $this->assertDatabaseCount('users', 5);
+    }
+
+
+
+
+
+
+
+    /*
+     * Polymorphic Many to Many
+     *
+     * User <<----->> Post
+     *           |
+     * Image <<--|-->> Image
+     */
+    public function test_it_can_save_the_polymorphic_many_to_many_with_files()
+    {
+        config()->set('apiautopilot.settings.' . Image::class . '.database_file_url', 'image_url');
+        config()->set('apiautopilot.settings.' . Post::class . '.database_file_url', 'featured_image_url');
+
+        Storage::fake('public');
+        $file1 = UploadedFile::fake()->image('avatar.jpg');
+        $file2 = UploadedFile::fake()->image('avatar.jpg');
+        $file3 = UploadedFile::fake()->image('avatar.jpg');
+
+        $this->postJson('/api/aap/post/images', [
+            'title' => 'lorem Ipsum',
+            'body' => 'post body',
+            'user_id' => 2,
+            'featured_image_url' => $file1,
+            'images' => [
+                ['image_url' => $file1],
+                ['image_url' => $file2],
+                ['image_url' => $file3],]
         ]);
+        $this
+            ->assertDatabaseCount('posts', 16)
+            ->assertDatabaseCount('images', 1);
+    }
+
+    public function test_it_can_create_an_image_and_attach_a_single_user_to_it()
+    {
+        config()->set('apiautopilot.settings.' . Image::class . '.database_file_url', 'image_url');
+        Storage::fake('public');
+        $file1 = UploadedFile::fake()->image('avatar.jpg');
+
+        $response = $this->postJson('/api/aap/image/users', [
+            'image_url' => $file1,
+            'users' => [1]
+        ]);
+        $response->assertOk();
+        $this->assertDatabaseCount('images', 1);
+        $this->assertDatabaseCount('imageables', 1);
+    }
+
+    public function test_it_can_create_an_image_and_attach_a_many_user_to_it()
+    {
+        config()->set('apiautopilot.settings.' . Image::class . '.database_file_url', 'image_url');
+        Storage::fake('public');
+        $file1 = UploadedFile::fake()->image('avatar.jpg');
+
+        $response = $this->postJson('/api/aap/image/users', [
+            'image_url' => $file1,
+            'users' => [1, 2, 3, 4]
+        ]);
+        $response->assertOk();
+        $this->assertDatabaseCount('images', 1);
+        $this->assertDatabaseCount('imageables', 4);
     }
 }
