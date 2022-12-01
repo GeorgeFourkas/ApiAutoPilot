@@ -20,9 +20,9 @@ class FileHandler
     protected bool $hasFile = false;
 
     /**
-     * @param  UploadedFile|array  $files
-     * @param  Request  $request
-     * @param  Model  $model
+     * @param UploadedFile|array $files
+     * @param Request $request
+     * @param Model $model
      * @return array
      */
     public function __construct(Model $model, string $urlColumn)
@@ -73,7 +73,6 @@ class FileHandler
         if (method_exists($this->model, 'setAdditionalFileData')) {
             return $this->model->setAdditionalFileData($file);
         }
-
         return [];
     }
 

@@ -34,9 +34,10 @@ class ApiAutoPilotController extends Controller
      */
     public function index(Request $request, $modelName): JsonResponse
     {
+
         $model = $request->get('modelClass');
         $this->callPolicy('viewAny', $model::class, $modelName);
-        $pagination = config('autopilot-api.settings.'.$model::class.'.pagination');
+        $pagination = config('apiautopilot.settings.'.$model::class.'.pagination');
         if ($pagination) {
             return response()->json($model->paginate($pagination));
         }
@@ -141,10 +142,6 @@ class ApiAutoPilotController extends Controller
             ->verifyManyToManyExists($second)
             ->sync(($modelClass)::findOrFail($id))
             ->responseToDetach();
-    }
-
-    public function createdRelated(Request $request, $modelName, $id, $relationship, ModelResolver $resolver)
-    {
     }
 
     public function getWithRelation(Request $request, $modelName, $id, $relation): JsonResponse

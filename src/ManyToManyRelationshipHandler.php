@@ -12,19 +12,39 @@ use Illuminate\Support\Arr;
 
 class ManyToManyRelationshipHandler
 {
+    /**
+     * @var array|bool
+     */
     protected array|bool $relationExists;
 
+    /**
+     * @var array
+     */
     protected array $relations;
 
+    /**
+     * @var Request
+     */
     protected Request $request;
 
+    /**
+     * @var Model
+     */
     protected Model $model;
 
+
+    /**
+     * @var int
+     */
     private int $modelId;
 
     use HasResponse;
     use HasPivotKeys;
 
+    /**
+     * @param Request $aRequest
+     * @return $this
+     */
     public function setRequest(Request $aRequest): static
     {
         $this->request = $aRequest;
@@ -34,6 +54,10 @@ class ManyToManyRelationshipHandler
         return $this;
     }
 
+    /**
+     * @param Model $aModel
+     * @return $this
+     */
     public function setModelClass(Model $aModel): static
     {
         $this->model = $aModel;
@@ -41,6 +65,10 @@ class ManyToManyRelationshipHandler
         return $this;
     }
 
+    /**
+     * @param $id
+     * @return $this
+     */
     public function setModelID($id): static
     {
         $this->modelId = $id;
@@ -48,6 +76,10 @@ class ManyToManyRelationshipHandler
         return $this;
     }
 
+    /**
+     * @param array $someRelations
+     * @return void
+     */
     protected function setModelRelations(array $someRelations): void
     {
         $this->relations = $someRelations;
@@ -68,6 +100,9 @@ class ManyToManyRelationshipHandler
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     public function attachTo(): static
     {
         $loadedModel = ($this->model)::findOrFail($this->modelId);
@@ -76,6 +111,10 @@ class ManyToManyRelationshipHandler
         return $this;
     }
 
+    /**
+     * @param Model $model
+     * @return $this
+     */
     public function detachFrom(Model $model): static
     {
         $model->{$this->relationExists['name']}()->detach($this->flatenForPivot($this->request->ids));
@@ -85,6 +124,7 @@ class ManyToManyRelationshipHandler
 
     public function sync(Model $model): static
     {
+        dd($this->relationExists);
         $model->{$this->relationExists['name']}()->sync($this->flatenForPivot($this->request->ids));
 
         return $this;

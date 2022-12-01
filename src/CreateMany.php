@@ -2,6 +2,8 @@
 
 namespace ApiAutoPilot\ApiAutoPilot;
 
+use ApiAutoPilot\ApiAutoPilot\Exceptions\FileUrlDatabaseColumnIndexNotPresent;
+use ApiAutoPilot\ApiAutoPilot\Exceptions\ModelNotEligibleForAttach;
 use ApiAutoPilot\ApiAutoPilot\Interfaces\CreateModel;
 use ApiAutoPilot\ApiAutoPilot\Traits\HasPolicies;
 use ApiAutoPilot\ApiAutoPilot\Traits\HasResponse;
@@ -23,6 +25,12 @@ class CreateMany implements CreateModel
     protected Model $model;
 
     protected Request $request;
+
+    protected bool $isEligibleForAttaching;
+
+    protected bool $isArrayOfIds;
+
+
 
     public function setRelated(Relation $related): static
     {
@@ -48,53 +56,33 @@ class CreateMany implements CreateModel
     /**
      * @throws \ReflectionException
      * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws ModelNotEligibleForAttach
      */
     public function create(): array
     {
-        $urlColumn = FileUrlResolver::findUrlTableColumn($this->model);
+        if ($this->isArrayOfIds() && !$this->isEligibleForAttaching()) {
+            throw new ModelNotEligibleForAttach();
+        }
+        $mainModel = $this->createMainModel();
         if ($this->isArrayOfIds()) {
-            if (! $this->isEligibleForAttaching()) {
-                return ['error' => ['error_message' => 'the endpoint doesnt exist']];
-            }
-            $created = $this->createMainModel();
-            $created->{$this->related->getFunctionName()}()->attach($this->request->{$this->related->getFunctionName()});
-
-            return $created->load($this->related->getFunctionName())->toArray();
+            $mainModel->{$this->related->getFunctionName()}()->attach($this->request->{$this->related->getFunctionName()});
+            return $mainModel->load($this->related->getFunctionName())->toArray();
         } else {
             $requestData = $this->getRequestData();
             $relatedModel = (new ($this->related->getRelatedModelClass()));
-            //If cant create related model don't create the even the first model
-            $this->callPolicy('create', $relatedModel::class, $this->request->route('related'));
-            $created = $this->createMainModel();
-            $urlColumn = FileUrlResolver::findUrlTableColumn(new ($this->related->getRelatedModelClass()));
-            $handler = new FileHandler($relatedModel, $urlColumn);
-            $values = $handler->replaceUploadedFileToUrl($requestData);
-            if ($handler->requestHasFile()) {
-                foreach ($values as $key => $value) {
-                    $values[$key] = array_merge($value, $value[$urlColumn] ?? []);
-                }
-            }
-            if (is_string(current($values))) {
-                $created->{$this->related
-                    ->getFunctionName()}()
-                    ->create($values);
-            } else {
-                $created->{$this->related
-                    ->getFunctionName()}()
-                    ->createMany($values);
-            }
-
-            return $created->load($this->related->getFunctionName())->toArray();
+            $this->createRelatedModel($mainModel, $relatedModel, $requestData);
         }
+
+        return $mainModel->load($this->related->getFunctionName())->toArray();
     }
 
     protected function isArrayOfIds(): bool
     {
-        if (! is_array($this->request->{$this->related->getFunctionName()})) {
+        if (!is_array($this->request->{$this->related->getFunctionName()})) {
             return false;
         }
         foreach ($this->request->{$this->related->getFunctionName()} ?? [] as $item) {
-            if (! is_int($item)) {
+            if (!is_int($item)) {
                 return false;
             }
         }
@@ -116,9 +104,35 @@ class CreateMany implements CreateModel
         $this->callPolicy('create', $this->model::class, $this->request->route('modelName'));
         $urlColumn = FileUrlResolver::findUrlTableColumn($this->model);
         $handler = new FileHandler($this->model, $urlColumn);
-        $modelValues = $handler->replaceUploadedFileToUrl($this->request->except($this->related->getFunctionName()));
+        $requestValues = $this->request->except($this->related->getFunctionName());
+        $modelValues = $handler->replaceUploadedFileToUrl($requestValues);
+        return ($this->model)::create($this->flattenArray($modelValues, $urlColumn));
+    }
 
-        return ($this->model)::create($modelValues);
+    protected function createRelatedModel(Model $mainModel, Model $relatedModel, $requestData)
+    {
+        $this->callPolicy('create', $relatedModel::class, $this->request->route('related'));
+        $urlColumn = FileUrlResolver::findUrlTableColumn(new $relatedModel);
+        $handler = new FileHandler($relatedModel, $urlColumn);
+        $values = $handler->replaceUploadedFileToUrl($requestData);
+        if ($handler->requestHasFile()) {
+            $values = $this->flattenArray($values, $urlColumn);
+        }
+        $this->saveRelatedModel($mainModel, $values);
+
+    }
+
+    protected function saveRelatedModel(Model $created, array $values)
+    {
+        if (is_string(current($values))) {
+            $created->{$this->related
+                ->getFunctionName()}()
+                ->create($values);
+        } else {
+            $created->{$this->related
+                ->getFunctionName()}()
+                ->createMany($values);
+        }
     }
 
     protected function getRequestData()
@@ -127,4 +141,32 @@ class CreateMany implements CreateModel
             ? $this->request->{$this->related->getFunctionName()}
             : [$this->request->{$this->related->getFunctionName()}];
     }
+
+    protected function flattenArray(array $multiDimentionalArray, string $urlColumn): array
+    {
+        if (!$this->request->file()) {
+            return $multiDimentionalArray;
+        }
+
+        $values = $multiDimentionalArray;
+        if (is_array(current($values))) {
+            foreach ($values as $key => $value) {
+                if (isset($value[$urlColumn])) {
+                    $fileData = $value[$urlColumn];
+                    unset($value[$urlColumn]);
+                    $values = array_merge($fileData, $value);
+                }
+            }
+        } else {
+            if (isset($values[$urlColumn])) {
+                $fileData = $values[$urlColumn];
+                unset($values[$urlColumn]);
+                $values = array_merge($fileData, $values);
+            }
+        }
+        return $values;
+
+    }
+
+
 }

@@ -1,5 +1,4 @@
 <?php
-
 return [
     'index' => [
         'exclude' => [
@@ -26,5 +25,23 @@ return [
 
         ],
     ],
+    'attach' => [
+        'exclude' => [
 
+        ]
+    ],
+    'detach' => [
+        'exclude' => [
+
+        ]
+    ],
+    'sync' => [
+        'exclude' => [
+
+        ]
+    ],
+
+    'settings' => [
+
+    ]
 ];

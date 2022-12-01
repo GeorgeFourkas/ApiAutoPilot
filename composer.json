@@ -34,13 +34,14 @@
     },
     "autoload": {
         "psr-4": {
-            "ApiAutoPilot\\ApiAutoPilot\\": "src",
-            "ApiAutoPilot\\ApiAutoPilot\\Database\\Factories\\": "database/factories"
+            "ApiAutoPilot\\ApiAutoPilot\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "ApiAutoPilot\\ApiAutoPilot\\Tests\\": "tests"
+            "ApiAutoPilot\\ApiAutoPilot\\Tests\\": "tests",
+            "ApiAutoPilot\\ApiAutoPilot\\Database\\Factories\\": "tests/Fixtures/Database/Factories"
+
         }
     },
     "scripts": {
