@@ -19,12 +19,12 @@ class ModelSearch
      */
     public function handle(Request $request, Closure $next)
     {
-        $namespace = 'App\\Models\\' . ucfirst($request->route('modelName'));
+        $namespace = 'App\\Models\\'.ucfirst($request->route('modelName'));
         if (App::runningUnitTests()) {
-            $namespace = "ApiAutoPilot\\ApiAutoPilot\\Tests\\Fixtures\Models\\" . ucfirst($request->route('modelName'));
+            $namespace = "ApiAutoPilot\\ApiAutoPilot\\Tests\\Fixtures\Models\\".ucfirst($request->route('modelName'));
         }
 
-        if (!class_exists($namespace)) {
+        if (! class_exists($namespace)) {
             return $this->notFoundResponse();
         }
         if ($this->endpointIsExcluded($namespace)) {
@@ -57,11 +57,9 @@ class ModelSearch
 
     protected function endpointIsExcluded($namespace): bool
     {
-        $routeConfigIndex = 'apiautopilot.' . Route::currentRouteName() . '.exclude';
+        $routeConfigIndex = 'apiautopilot.'.Route::currentRouteName().'.exclude';
         $routeSettings = config($routeConfigIndex);
 
         return in_array($namespace, $routeSettings ?? []);
-
-
     }
 }

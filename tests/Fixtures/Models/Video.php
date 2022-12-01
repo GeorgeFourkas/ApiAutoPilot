@@ -12,5 +12,4 @@ class Video extends Model
     {
         return $this->morphMany(Comment::class, 'commentable');
     }
-
 }
