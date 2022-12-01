@@ -25,16 +25,15 @@ class ApiAutoPilot
                     ->name('create');
                 Route::delete('{modelName}/{id}', [ApiAutoPilotController::class, 'delete'])
                     ->name('delete');
-
                 Route::get('/search/query/{modelName}', [ApiAutoPilotController::class, 'search'])
                     ->name('search');
-                Route::get('{modelName}/{id}/{relation}', [ApiAutoPilotController::class, 'getWithRelation'])
+                Route::get('{modelName}/{id}/{related}', [ApiAutoPilotController::class, 'getWithRelation'])
                     ->name('show.relationship');
-                Route::post('/{modelName}/{id}/{second}/attach', [ApiAutoPilotController::class, 'attach'])
+                Route::post('/{modelName}/{id}/{related}/attach', [ApiAutoPilotController::class, 'attach'])
                     ->name('attach');
-                Route::delete('/{modelName}/{id}/{second}/detach', [ApiAutoPilotController::class, 'detach'])
+                Route::delete('/{modelName}/{id}/{related}/detach', [ApiAutoPilotController::class, 'detach'])
                     ->name('detach');
-                Route::patch('/{modelName}/{id}/{second}/sync', [ApiAutoPilotController::class, 'sync'])
+                Route::post('/{modelName}/{id}/{related}/sync', [ApiAutoPilotController::class, 'sync'])
                     ->name('sync');
             });
     }

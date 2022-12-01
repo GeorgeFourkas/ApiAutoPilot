@@ -101,12 +101,12 @@ class ApiAutoPilotController extends Controller
     /**
      * @throws \ApiAutoPilot\ApiAutoPilot\Exceptions\NotAbleForPivotTableOperationsException
      */
-    public function attach(Request $request, $modelName, $id, $second, ManyToManyRelationshipHandler $handler): JsonResponse
+    public function attach(Request $request, $modelName, $id, $related, ManyToManyRelationshipHandler $handler): JsonResponse
     {
         return $handler
             ->setRequest($request)
             ->setModelID($id)
-            ->verifyManyToManyExists($second)
+            ->verifyManyToManyExists($related)
             ->attachTo()
             ->responseToAttach();
     }
@@ -114,7 +114,7 @@ class ApiAutoPilotController extends Controller
     /**
      * @throws \ApiAutoPilot\ApiAutoPilot\Exceptions\NotAbleForPivotTableOperationsException
      */
-    public function detach(AttachDetachSyncRequest $request, $modelName, $id, $second, ManyToManyRelationshipHandler $handler): JsonResponse
+    public function detach(AttachDetachSyncRequest $request, $modelName, $id, $related, ManyToManyRelationshipHandler $handler): JsonResponse
     {
         $modelClass = $request->get('modelClass');
 
@@ -122,7 +122,7 @@ class ApiAutoPilotController extends Controller
             ->setRequest($request)
             ->setModelClass($modelClass)
             ->setModelID($id)
-            ->verifyManyToManyExists($second)
+            ->verifyManyToManyExists($related)
             ->detachFrom(($modelClass)::findOrFail($id))
             ->responseToDetach();
     }
@@ -130,7 +130,7 @@ class ApiAutoPilotController extends Controller
     /**
      * @throws \ApiAutoPilot\ApiAutoPilot\Exceptions\NotAbleForPivotTableOperationsException
      */
-    public function sync(AttachDetachSyncRequest $request, $modelName, $id, $second, ManyToManyRelationshipHandler $handler): JsonResponse
+    public function sync(AttachDetachSyncRequest $request, $modelName, $id, $related, ManyToManyRelationshipHandler $handler): JsonResponse
     {
         $modelClass = $request->get('modelClass');
 
@@ -138,18 +138,18 @@ class ApiAutoPilotController extends Controller
             ->setRequest($request)
             ->setModelClass($modelClass)
             ->setModelID($id)
-            ->verifyManyToManyExists($second)
+            ->verifyManyToManyExists($related)
             ->sync(($modelClass)::findOrFail($id))
-            ->responseToDetach();
+            ->responseToAttach();
     }
 
-    public function getWithRelation(Request $request, $modelName, $id, $relation): JsonResponse
+    public function getWithRelation(Request $request, $modelName, $id, $related): JsonResponse
     {
         $modelClass = $request->get('modelClass');
         $model = $modelClass::findOrFail($id);
         $this->callPolicy('view', $modelClass::class, $modelName, $model);
-        if (Arr::exists($request->get('relationships'), $relation)) {
-            return response()->json($model->load($relation));
+        if (Arr::exists($request->get('relationships'), $related)) {
+            return response()->json($model->load($related));
         }
 
         return $this->notFoundResponse();

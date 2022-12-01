@@ -123,7 +123,7 @@ class ManyToManyRelationshipHandler
 
     public function sync(Model $model): static
     {
-        dd($this->relationExists);
+
         $model->{$this->relationExists['name']}()->sync($this->flatenForPivot($this->request->ids));
 
         return $this;

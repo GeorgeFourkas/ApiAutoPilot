@@ -57,7 +57,7 @@ class TestCase extends Orchestra
                 ->name('attach');
             $router->delete('/{modelName}/{id}/{second}/detach', [ApiAutoPilotController::class, 'detach'])
                 ->name('detach');
-            $router->patch('/{modelName}/{id}/{second}/sync', [ApiAutoPilotController::class, 'sync'])
+            $router->post('/{modelName}/{id}/{second}/sync', [ApiAutoPilotController::class, 'sync'])
                 ->name('sync');
         });
     }
@@ -78,6 +78,8 @@ class TestCase extends Orchestra
         $migration = include __DIR__.'/Fixtures/Database/Migrations/create_images_table.php';
         $migration->up();
         $migration = include __DIR__.'/Fixtures/Database/Migrations/create_imageables_table.php';
+        $migration->up();
+        $migration = include __DIR__.'/Fixtures/Database/Migrations/create_comments_table.php';
         $migration->up();
     }
 }

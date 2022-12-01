@@ -20,6 +20,11 @@ class UpdateModelTest extends TestCase
             'title' => 'updated title',
             'body' => 'updated_body',
         ])->assertOk();
+
+        $this->assertDatabaseHas('posts', [
+            'title' => 'updated title',
+            'body' => 'updated_body',
+        ]);
     }
 
     public function test_it_throws_a_404_response_when_the_model_that_trying_to_update_does_not_exist()

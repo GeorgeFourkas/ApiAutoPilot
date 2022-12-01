@@ -42,9 +42,7 @@ class CreateSingleModelTest extends TestCase
             'featured_image_url' => $file,
             'user_id' => 1,
         ]);
-        $response->assertOk()->assertJsonFragment([
-
-        ]);
+        $response->assertOk();
     }
 
     public function test_it_throws_error_message_when_database_file_url_index_is_not_set_in_the_settings_config_array_index()

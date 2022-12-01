@@ -8,6 +8,7 @@ use ApiAutoPilot\ApiAutoPilot\Tests\Fixtures\Http\Requests\CreatePostRequest;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Http\UploadedFile;
 
@@ -43,6 +44,11 @@ class Post extends Model implements FileManipulation
     public function images(): MorphToMany
     {
         return $this->morphToMany(Image::class, 'imageable');
+    }
+
+    public function comments(): MorphMany
+    {
+        return $this->morphMany(Comment::class,'commentable');
     }
 
     protected static function newFactory()
