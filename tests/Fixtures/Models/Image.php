@@ -11,7 +11,7 @@ class Image extends Model implements FileManipulation
 {
     protected $fillable = ['image_url', 'size', 'extension', 'original_name'];
 
-    public function setAdditionalFileData(UploadedFile $file):array
+    public function setAdditionalFileData(UploadedFile $file): array
     {
         return [
             'size' => $file->getSize(),

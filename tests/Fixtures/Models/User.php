@@ -39,6 +39,7 @@ class User extends Authenticatable
     {
         return $this->morphToMany(Image::class, 'imageable');
     }
+
     protected static function newFactory()
     {
         return UserFactory::new();

@@ -5,8 +5,6 @@ namespace ApiAutoPilot\ApiAutoPilot\Tests\Feature\Relationships;
 use ApiAutoPilot\ApiAutoPilot\Tests\Fixtures\Models\Post;
 use ApiAutoPilot\ApiAutoPilot\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Testing\Fluent\AssertableJson;
 
 class GetModelWithRelationshipTest extends TestCase
@@ -15,7 +13,6 @@ class GetModelWithRelationshipTest extends TestCase
 
     public function test_it_can_bring_the_users_posts_only_containing_the_correct_user_id()
     {
-
         Post::create([
             'title' => fake()->title,
             'body' => fake()->paragraph,
@@ -49,12 +46,12 @@ class GetModelWithRelationshipTest extends TestCase
         $this->assertDatabaseCount('posts', 18);
         $response = $this->get('/api/aap/user/1/posts');
         $response->assertOk()
-            ->assertJson(function (AssertableJson $json){
-            $json->has('posts')
-                ->where('posts.0.user_id', 1)
-                ->where('posts.1.user_id', 1)
-                ->where('posts.2.user_id', 1)
-                ->etc();
-        });
+            ->assertJson(function (AssertableJson $json) {
+                $json->has('posts')
+                    ->where('posts.0.user_id', 1)
+                    ->where('posts.1.user_id', 1)
+                    ->where('posts.2.user_id', 1)
+                    ->etc();
+            });
     }
 }

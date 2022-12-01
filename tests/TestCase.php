@@ -8,7 +8,6 @@ use ApiAutoPilot\ApiAutoPilot\Tests\Fixtures\Database\seeders\AutoPilotSeeder;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Foundation\Console\Kernel;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Artisan;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
@@ -20,13 +19,13 @@ class TestCase extends Orchestra
         parent::setUp();
         $this->seed(AutoPilotSeeder::class);
         Factory::guessFactoryNamesUsing(
-            fn(string $modelName) => 'ApiAutoPilot\\ApiAutoPilot\\Tests\\Fixtures\\Database\\Factories\\' . class_basename($modelName) . 'Factory'
+            fn (string $modelName) => 'ApiAutoPilot\\ApiAutoPilot\\Tests\\Fixtures\\Database\\Factories\\'.class_basename($modelName).'Factory'
         );
     }
 
     public function refreshDatabase()
     {
-        $this->artisan('migrate', ['--path' => __DIR__ . '/Fixtures/database/migrations', '--realpath' => true]);
+        $this->artisan('migrate', ['--path' => __DIR__.'/Fixtures/database/migrations', '--realpath' => true]);
         $this->app[Kernel::class]->setArtisan(null);
     }
 
@@ -66,19 +65,19 @@ class TestCase extends Orchestra
     public function getEnvironmentSetUp($app)
     {
         config()->set('database.default', 'testing');
-        $migration = include __DIR__ . '/Fixtures/Database/Migrations/create_users_table.php';
+        $migration = include __DIR__.'/Fixtures/Database/Migrations/create_users_table.php';
         $migration->up();
-        $migration = include __DIR__ . '/Fixtures/Database/Migrations/create_posts_table.php';
+        $migration = include __DIR__.'/Fixtures/Database/Migrations/create_posts_table.php';
         $migration->up();
-        $migration = include __DIR__ . '/Fixtures/Database/Migrations/create_phones_table.php';
+        $migration = include __DIR__.'/Fixtures/Database/Migrations/create_phones_table.php';
         $migration->up();
-        $migration = include __DIR__ . '/Fixtures/Database/Migrations/create_tags_table.php';
+        $migration = include __DIR__.'/Fixtures/Database/Migrations/create_tags_table.php';
         $migration->up();
-        $migration = include __DIR__ . '/Fixtures/Database/Migrations/create_post_tag_table.php';
+        $migration = include __DIR__.'/Fixtures/Database/Migrations/create_post_tag_table.php';
         $migration->up();
-        $migration = include __DIR__ . '/Fixtures/Database/Migrations/create_images_table.php';
+        $migration = include __DIR__.'/Fixtures/Database/Migrations/create_images_table.php';
         $migration->up();
-        $migration = include __DIR__ . '/Fixtures/Database/Migrations/create_imageables_table.php';
+        $migration = include __DIR__.'/Fixtures/Database/Migrations/create_imageables_table.php';
         $migration->up();
     }
 }
