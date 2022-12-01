@@ -109,13 +109,17 @@ class CreateMany implements CreateModel
         return ($this->model)::create($this->flattenArray($modelValues, $urlColumn));
     }
 
+    /**
+     * @throws \ReflectionException
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
     protected function createRelatedModel(Model $mainModel, Model $relatedModel, $requestData)
     {
         $this->callPolicy('create', $relatedModel::class, $this->request->route('related'));
-        $urlColumn = FileUrlResolver::findUrlTableColumn(new $relatedModel);
+        $urlColumn = FileUrlResolver::findUrlTableColumn($relatedModel);
         $handler = new FileHandler($relatedModel, $urlColumn);
         $values = $handler->replaceUploadedFileToUrl($requestData);
-        if ($handler->requestHasFile()) {
+        if ($handler->foundFile()) {
             $values = $this->flattenArray($values, $urlColumn);
         }
         $this->saveRelatedModel($mainModel, $values);

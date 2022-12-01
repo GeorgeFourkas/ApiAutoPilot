@@ -93,7 +93,7 @@ class ModelResolver
         $urlColumn = FileUrlResolver::findUrlTableColumn($this->model);
         $handler = new FileHandler($this->model, $urlColumn);
         $values = $handler->replaceUploadedFileToUrl($this->request->all());
-        if ($handler->requestHasFile()) {
+        if ($handler->foundFile()) {
             $values = array_merge($values, $values[$urlColumn]);
         }
         $model->update($values);

@@ -105,7 +105,7 @@ class FileHandler
         return '/public/aap';
     }
 
-    public function requestHasFile(): bool
+    public function foundFile(): bool
     {
         return $this->hasFile;
     }
