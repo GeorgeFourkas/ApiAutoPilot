@@ -13,10 +13,10 @@ class Post extends Model implements FileManipulation
 {
     use HasFactory;
 
-    protected $fillable = ['body', 'title', 'user_id', 'featured_image_url', 'original_client_name', 'extension', 'size',];
+    protected $fillable = ['body', 'title', 'user_id', 'featured_image_url', 'original_client_name', 'extension', 'size'];
 
     public array $requestValidations = [
-        'create' => CreatePostRequest::class
+        'create' => CreatePostRequest::class,
     ];
 
     public function setAdditionalFileData(UploadedFile $file): array
@@ -24,7 +24,7 @@ class Post extends Model implements FileManipulation
         return [
             'original_client_name' => $file->getClientOriginalName(),
             'extension' => $file->getClientOriginalExtension(),
-            'size' => $file->getSize()
+            'size' => $file->getSize(),
         ];
     }
 
@@ -38,7 +38,8 @@ class Post extends Model implements FileManipulation
         return $this->belongsToMany(Tag::class);
     }
 
-    protected static function newFactory(){
+    protected static function newFactory()
+    {
         return PostFactory::new();
     }
 }

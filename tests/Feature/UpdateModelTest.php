@@ -13,21 +13,20 @@ class UpdateModelTest extends TestCase
     {
         $response = $this->postJson('/api/aap/update/post/2/', [
             'title' => 'updated title',
-            'body' => 'updated_body'
+            'body' => 'updated_body',
         ]);
 
         $response->assertJson([
             'title' => 'updated title',
-             'body' => 'updated_body',
+            'body' => 'updated_body',
         ])->assertOk();
     }
 
     public function test_it_throws_a_404_response_when_the_model_that_trying_to_update_does_not_exist()
     {
         $response = $this->postJson('/api/aap/update/post/-1', [
-            'title' => 'a title'
+            'title' => 'a title',
         ]);
         $response->assertNotFound();
     }
-
 }

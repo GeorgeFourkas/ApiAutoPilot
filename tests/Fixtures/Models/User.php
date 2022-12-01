@@ -2,8 +2,6 @@
 
 namespace ApiAutoPilot\ApiAutoPilot\Tests\Fixtures\Models;
 
-
-use ApiAutoPilot\ApiAutoPilot\Tests\Fixtures\Database\Factories\PostFactory;
 use ApiAutoPilot\ApiAutoPilot\Tests\Fixtures\Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -13,7 +11,6 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
-
 
     protected $fillable = [
         'name', 'email', 'password',
@@ -28,7 +25,6 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-
     public function posts(): HasMany
     {
         return $this->hasMany(Post::class);
@@ -39,7 +35,8 @@ class User extends Authenticatable
         return $this->hasOne(Phone::class);
     }
 
-    protected static function newFactory(){
+    protected static function newFactory()
+    {
         return UserFactory::new();
     }
 }

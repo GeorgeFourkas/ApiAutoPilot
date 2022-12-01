@@ -2,7 +2,6 @@
 
 namespace ApiAutoPilot\ApiAutoPilot;
 
-use ApiAutoPilot\ApiAutoPilot\Exceptions\FileUrlDatabaseColumnIndexNotPresent;
 use ApiAutoPilot\ApiAutoPilot\Exceptions\ModelNotEligibleForAttach;
 use ApiAutoPilot\ApiAutoPilot\Interfaces\CreateModel;
 use ApiAutoPilot\ApiAutoPilot\Traits\HasPolicies;
@@ -29,8 +28,6 @@ class CreateMany implements CreateModel
     protected bool $isEligibleForAttaching;
 
     protected bool $isArrayOfIds;
-
-
 
     public function setRelated(Relation $related): static
     {
@@ -60,12 +57,13 @@ class CreateMany implements CreateModel
      */
     public function create(): array
     {
-        if ($this->isArrayOfIds() && !$this->isEligibleForAttaching()) {
+        if ($this->isArrayOfIds() && ! $this->isEligibleForAttaching()) {
             throw new ModelNotEligibleForAttach();
         }
         $mainModel = $this->createMainModel();
         if ($this->isArrayOfIds()) {
             $mainModel->{$this->related->getFunctionName()}()->attach($this->request->{$this->related->getFunctionName()});
+
             return $mainModel->load($this->related->getFunctionName())->toArray();
         } else {
             $requestData = $this->getRequestData();
@@ -78,11 +76,11 @@ class CreateMany implements CreateModel
 
     protected function isArrayOfIds(): bool
     {
-        if (!is_array($this->request->{$this->related->getFunctionName()})) {
+        if (! is_array($this->request->{$this->related->getFunctionName()})) {
             return false;
         }
         foreach ($this->request->{$this->related->getFunctionName()} ?? [] as $item) {
-            if (!is_int($item)) {
+            if (! is_int($item)) {
                 return false;
             }
         }
@@ -106,6 +104,7 @@ class CreateMany implements CreateModel
         $handler = new FileHandler($this->model, $urlColumn);
         $requestValues = $this->request->except($this->related->getFunctionName());
         $modelValues = $handler->replaceUploadedFileToUrl($requestValues);
+
         return ($this->model)::create($this->flattenArray($modelValues, $urlColumn));
     }
 
@@ -123,7 +122,6 @@ class CreateMany implements CreateModel
             $values = $this->flattenArray($values, $urlColumn);
         }
         $this->saveRelatedModel($mainModel, $values);
-
     }
 
     protected function saveRelatedModel(Model $created, array $values)
@@ -148,7 +146,7 @@ class CreateMany implements CreateModel
 
     protected function flattenArray(array $multiDimentionalArray, string $urlColumn): array
     {
-        if (!$this->request->file()) {
+        if (! $this->request->file()) {
             return $multiDimentionalArray;
         }
 
@@ -168,9 +166,7 @@ class CreateMany implements CreateModel
                 $values = array_merge($fileData, $values);
             }
         }
+
         return $values;
-
     }
-
-
 }

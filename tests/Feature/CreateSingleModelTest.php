@@ -14,14 +14,14 @@ class CreateSingleModelTest extends TestCase
 
     public function test_it_invokes_the_set_additional_file_data_method_in_model_class()
     {
-        config()->set('apiautopilot.settings.' . Post::class . '.database_file_url', 'featured_image_url');
+        config()->set('apiautopilot.settings.'.Post::class.'.database_file_url', 'featured_image_url');
         Storage::fake('public');
         $file = UploadedFile::fake()->image('avatar.jpg');
         $response = $this->post('/api/aap/post/', [
             'title' => 'lorem ipsum',
             'body' => 'ipsum lorem',
             'featured_image_url' => $file,
-            'user_id' => 1
+            'user_id' => 1,
         ]);
         $response->assertOk();
 
@@ -33,14 +33,14 @@ class CreateSingleModelTest extends TestCase
 
     public function test_it_can_create_post_with_uploaded_file()
     {
-        config()->set('apiautopilot.settings.' . Post::class . '.database_file_url', 'featured_image_url');
+        config()->set('apiautopilot.settings.'.Post::class.'.database_file_url', 'featured_image_url');
         Storage::fake('public');
         $file = UploadedFile::fake()->image('avatar.jpg');
         $response = $this->post('/api/aap/post/', [
             'title' => 'lorem ipsum',
             'body' => 'ipsum lorem',
             'featured_image_url' => $file,
-            'user_id' => 1
+            'user_id' => 1,
         ]);
         $response->assertOk()->assertJsonFragment([
 
@@ -55,7 +55,7 @@ class CreateSingleModelTest extends TestCase
             'title' => 'lorem ipsum',
             'body' => 'ipsum lorem',
             'featured_image_url' => $file,
-            'user_id' => 1
+            'user_id' => 1,
         ]);
         $response->assertUnprocessable();
     }
@@ -65,5 +65,4 @@ class CreateSingleModelTest extends TestCase
         $this->postJson('/api/aap/post', [])
             ->assertUnprocessable();
     }
-
 }

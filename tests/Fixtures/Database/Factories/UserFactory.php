@@ -3,8 +3,8 @@
 namespace ApiAutoPilot\ApiAutoPilot\Tests\Fixtures\Database\Factories;
 
 use ApiAutoPilot\ApiAutoPilot\Tests\Fixtures\Models\User;
-use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 class UserFactory extends Factory
 {
@@ -12,8 +12,6 @@ class UserFactory extends Factory
 
     public function definition()
     {
-
-
         return [
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),

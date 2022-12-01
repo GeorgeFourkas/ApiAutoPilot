@@ -19,7 +19,7 @@ class DeleteModelTest extends TestCase
     {
         $this->delete('/api/aap/post/2')->assertOk();
         $this->assertDatabaseMissing('posts', [
-            'id' => 2
+            'id' => 2,
         ]);
     }
 
