@@ -41,12 +41,13 @@ class CreateOne implements CreateModel
 
         $handler = new FileHandler($this->model, $urlColumn);
         $values = $handler->replaceUploadedFileToUrl($this->request->only($this->model->getFillable()));
-        if ($handler->foundFile()) {
+        if ($handler->requestHasFile()) {
             if (!$this->request->has($urlColumn)) {
                 throw new FileUrlDatabaseColumnIndexNotPresent($urlColumn);
             }
             $values = array_merge($values, $values[$urlColumn]);
         }
+
         return ($this->model)::create(
             $values
         )->toArray();
