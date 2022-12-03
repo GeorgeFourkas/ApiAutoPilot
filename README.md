@@ -4,8 +4,6 @@
 </p>
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/apiautopilot/apiautopilot.svg?style=flat-square)](https://packagist.org/packages/apiautopilot/apiautopilot)
-[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/apiautopilot/apiautopilot/run-tests?label=tests)](https://github.com/GeorgeFourkas/ApiAutoPilot/actions/workflows/run-tests.yml/badge.svg)
-[![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/apiautopilot/apiautopilot/Fix%20PHP%20code%20style%20issues?label=code%20style)](https://github.com/apiautopilot/apiautopilot/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/apiautopilot/apiautopilot.svg?style=flat-square)](https://packagist.org/packages/apiautopilot/apiautopilot)
 
 ### **Api Auto Pilot** is laravel package that makes the procecess of creating laravel RESTful APIs a breeze!
