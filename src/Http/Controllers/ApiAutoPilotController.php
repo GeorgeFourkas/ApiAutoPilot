@@ -151,6 +151,7 @@ class ApiAutoPilotController extends Controller
         if (Arr::exists($request->get('relationships'), $related)) {
             return response()->json($model->load($related));
         }
+
         return $this->notFoundResponse();
     }
 }

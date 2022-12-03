@@ -6,15 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Meta extends Model
 {
-
     protected $fillable = [
-        'meta_text', 'meta_label'
+        'meta_text', 'meta_label',
     ];
 
     public function metaable()
     {
         return $this->morphTo();
     }
-
-
 }
