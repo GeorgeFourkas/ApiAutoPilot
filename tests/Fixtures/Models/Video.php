@@ -17,5 +17,4 @@ class Video extends Model
     {
         return $this->morphOne(Meta::class, 'metaable');
     }
-
 }

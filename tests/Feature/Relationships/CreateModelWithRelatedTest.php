@@ -12,7 +12,6 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
-use function Pest\Laravel\assertDatabaseHas;
 
 class CreateModelWithRelatedTest extends TestCase
 {
@@ -183,7 +182,6 @@ class CreateModelWithRelatedTest extends TestCase
         $this->assertDatabaseCount('users', 5);
     }
 
-
     /*
      * Polymorphic one to one
      * Post <-------> Video
@@ -194,7 +192,7 @@ class CreateModelWithRelatedTest extends TestCase
 
     public function test_it_can_create_polymorphic_one_to_one_models_at_the_same_time()
     {
-        config()->set('apiautopilot.settings.' . Post::class . '.database_file_url', 'featured_image_url');
+        config()->set('apiautopilot.settings.'.Post::class.'.database_file_url', 'featured_image_url');
         Storage::fake('public');
         $file1 = UploadedFile::fake()->image('avatar.jpg');
 
@@ -205,8 +203,8 @@ class CreateModelWithRelatedTest extends TestCase
             'featured_image_url' => $file1,
             'meta' => [
                 'meta_label' => 'label',
-                'meta_text' => 'text'
-            ]
+                'meta_text' => 'text',
+            ],
         ])->assertOk();
 
         $this
@@ -221,7 +219,7 @@ class CreateModelWithRelatedTest extends TestCase
                 'meta_label' => 'label',
                 'meta_text' => 'text',
                 'metaable_id' => 16,
-                'metaable_type' => 'ApiAutoPilot\ApiAutoPilot\Tests\Fixtures\Models\Post'
+                'metaable_type' => 'ApiAutoPilot\ApiAutoPilot\Tests\Fixtures\Models\Post',
             ]);
     }
 
@@ -309,7 +307,6 @@ class CreateModelWithRelatedTest extends TestCase
                 ],
             ],
         ])->assertOk();
-
 
         $this
             ->assertDatabaseHas('comments', [
