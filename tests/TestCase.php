@@ -81,5 +81,8 @@ class TestCase extends Orchestra
         $migration->up();
         $migration = include __DIR__.'/Fixtures/Database/Migrations/create_comments_table.php';
         $migration->up();
+        $migration = include __DIR__.'/Fixtures/Database/Migrations/create_meta_table.php';
+        $migration->up();
+
     }
 }

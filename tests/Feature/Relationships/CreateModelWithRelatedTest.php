@@ -12,6 +12,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
+use function Pest\Laravel\assertDatabaseHas;
 
 class CreateModelWithRelatedTest extends TestCase
 {
@@ -182,6 +183,48 @@ class CreateModelWithRelatedTest extends TestCase
         $this->assertDatabaseCount('users', 5);
     }
 
+
+    /*
+     * Polymorphic one to one
+     * Post <-------> Video
+     *         |
+     *         |
+     *        Meta
+     */
+
+    public function test_it_can_create_polymorphic_one_to_one_models_at_the_same_time()
+    {
+        config()->set('apiautopilot.settings.' . Post::class . '.database_file_url', 'featured_image_url');
+        Storage::fake('public');
+        $file1 = UploadedFile::fake()->image('avatar.jpg');
+
+        $this->postJson('/api/aap/post/meta', [
+            'title' => 'lorem Ipsum',
+            'body' => 'post body',
+            'user_id' => 2,
+            'featured_image_url' => $file1,
+            'meta' => [
+                'meta_label' => 'label',
+                'meta_text' => 'text'
+            ]
+        ])->assertOk();
+
+        $this
+            ->assertDatabaseCount('posts', 16)
+            ->assertDatabaseCount('metas', 1)
+            ->assertDatabaseHas('posts', [
+                'title' => 'lorem Ipsum',
+                'body' => 'post body',
+                'user_id' => 2,
+            ])
+            ->assertDatabaseHas('metas', [
+                'meta_label' => 'label',
+                'meta_text' => 'text',
+                'metaable_id' => 16,
+                'metaable_type' => 'ApiAutoPilot\ApiAutoPilot\Tests\Fixtures\Models\Post'
+            ]);
+    }
+
     /*
      * Polymorphic Many to Many
      *
@@ -266,6 +309,7 @@ class CreateModelWithRelatedTest extends TestCase
                 ]
             ]
         ])->assertOk();
+
 
         $this
             ->assertDatabaseHas('comments', [

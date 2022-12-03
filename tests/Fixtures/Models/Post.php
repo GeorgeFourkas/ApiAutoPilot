@@ -41,6 +41,11 @@ class Post extends Model implements FileManipulation
         return $this->belongsToMany(Tag::class);
     }
 
+    public function meta()
+    {
+        return $this->morphOne(Meta::class, 'metaable');
+    }
+
     public function images(): MorphToMany
     {
         return $this->morphToMany(Image::class, 'imageable');
