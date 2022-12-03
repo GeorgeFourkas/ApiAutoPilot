@@ -47,7 +47,7 @@ class ExcludedEndpointsTest extends TestCase
     {
         config(['apiautopilot.update.exclude' => [Post::class]]);
         $this->postJson('/api/aap/update/post/1', [
-            'title' => 'updated title'
+            'title' => 'updated title',
         ])->assertStatus(403);
     }
 
@@ -55,7 +55,7 @@ class ExcludedEndpointsTest extends TestCase
     {
         config(['apiautopilot.attach.exclude' => [Post::class]]);
         $this->postJson('/api/aap/post/1/comments/attach', [
-            'ids' => [1, 2]
+            'ids' => [1, 2],
         ])->assertStatus(403);
     }
 
@@ -63,7 +63,7 @@ class ExcludedEndpointsTest extends TestCase
     {
         config(['apiautopilot.detach.exclude' => [Post::class]]);
         $this->delete('/api/aap/post/1/comments/detach', [
-            'ids' => [1, 2]
+            'ids' => [1, 2],
         ])->assertStatus(403);
     }
 
@@ -71,8 +71,7 @@ class ExcludedEndpointsTest extends TestCase
     {
         config(['apiautopilot.sync.exclude' => [Post::class]]);
         $this->postJson('/api/aap/post/1/comments/sync', [
-            'ids' => [1, 2]
+            'ids' => [1, 2],
         ])->assertStatus(403);
     }
-
 }

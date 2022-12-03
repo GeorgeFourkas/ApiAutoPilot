@@ -18,7 +18,7 @@ class Many2ManyOperationsTest extends TestCase
         Tag::create(['name' => fake()->word]);
 
         $this->postJson('/api/aap/post/1/tags/attach', [
-            'ids' => [1, 2, 3]
+            'ids' => [1, 2, 3],
         ])->assertOk();
 
         $this
@@ -34,10 +34,10 @@ class Many2ManyOperationsTest extends TestCase
         Tag::create(['name' => fake()->word]);
         Tag::create(['name' => fake()->word]);
         Tag::create(['name' => fake()->word]);
-        $post->tags()->attach([1,2,3]);
+        $post->tags()->attach([1, 2, 3]);
 
         $this->delete('/api/aap/post/1/tags/detach', [
-            'ids' => [1,2,3]
+            'ids' => [1, 2, 3],
         ])->assertStatus(204);
         $this->assertDatabaseCount('post_tag', 0);
     }
@@ -48,14 +48,14 @@ class Many2ManyOperationsTest extends TestCase
         Tag::create(['name' => fake()->word]);
         Tag::create(['name' => fake()->word]);
         Tag::create(['name' => fake()->word]);
-        $post->tags()->attach([1,2,3]);
+        $post->tags()->attach([1, 2, 3]);
 
         Tag::create(['name' => fake()->word]);
         Tag::create(['name' => fake()->word]);
         Tag::create(['name' => fake()->word]);
 
         $this->post('/api/aap/post/1/tags/sync', [
-            'ids' => [4,5,6]
+            'ids' => [4, 5, 6],
         ])->assertStatus(200);
 
         $this
