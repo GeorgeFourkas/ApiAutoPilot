@@ -14,7 +14,7 @@ class InstallationCommand extends Command
     "   ApiAutoPilot\ApiAutoPilot\Facades\ApiAutoPilot::routes();".PHP_EOL.
     '});'.PHP_EOL;
 
-    public $signature = 'autopilot:install';
+    public $signature = 'apiautopilot:install';
 
     public $description = 'this command installs the package.';
 
