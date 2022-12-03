@@ -24,7 +24,7 @@ class CreateModelWithRelatedTest extends TestCase
 
     public function test_it_can_create_a_user_with_many_posts_containing_many_images_in_the_request()
     {
-        config()->set('apiautopilot.settings.'.Post::class.'.database_file_url', 'featured_image_url');
+        config()->set('apiautopilot.settings.' . Post::class . '.database_file_url', 'featured_image_url');
 
         Storage::fake('public');
         $file = UploadedFile::fake()->image('avatar.jpg');
@@ -76,7 +76,7 @@ class CreateModelWithRelatedTest extends TestCase
 
     public function test_it_can_create_a_user_with_with_phone_without_an_uploaded_image_in_the_request_json_body()
     {
-        config()->set('apiautopilot.settings.'.Phone::class.'.database_file_url', 'provider_logo');
+        config()->set('apiautopilot.settings.' . Phone::class . '.database_file_url', 'provider_logo');
         $this->postJson('/api/aap/user/phone', [
             'name' => 'george fourkas',
             'email' => 'email@somewhere.com',
@@ -94,7 +94,7 @@ class CreateModelWithRelatedTest extends TestCase
      */
     public function test_it_can_create_post_with_many_tags_and_attach_it_to_the_table()
     {
-        config()->set('apiautopilot.settings.'.Post::class.'.database_file_url', 'featured_image_url');
+        config()->set('apiautopilot.settings.' . Post::class . '.database_file_url', 'featured_image_url');
         Storage::fake('aap');
         $file = UploadedFile::fake()->image('avatar.jpg');
 
@@ -120,7 +120,7 @@ class CreateModelWithRelatedTest extends TestCase
         Tag::create(['name' => 'tag 2']);
         Tag::create(['name' => 'tag 3']);
 
-        config()->set('apiautopilot.settings.'.Post::class.'.database_file_url', 'featured_image_url');
+        config()->set('apiautopilot.settings.' . Post::class . '.database_file_url', 'featured_image_url');
         Storage::fake('aap');
         $file = UploadedFile::fake()->image('avatar.jpg');
 
@@ -135,7 +135,7 @@ class CreateModelWithRelatedTest extends TestCase
 
     public function test_it_can_create_tag_and_assign_all_posts()
     {
-        config()->set('apiautopilot.settings.'.Post::class.'.database_file_url', 'featured_image_url');
+        config()->set('apiautopilot.settings.' . Post::class . '.database_file_url', 'featured_image_url');
         Storage::fake('aap');
         $file1 = UploadedFile::fake()->image('avatar.jpg');
         $file2 = UploadedFile::fake()->image('avatar.jpg');
@@ -192,7 +192,7 @@ class CreateModelWithRelatedTest extends TestCase
 
     public function test_it_can_create_polymorphic_one_to_one_models_at_the_same_time()
     {
-        config()->set('apiautopilot.settings.'.Post::class.'.database_file_url', 'featured_image_url');
+        config()->set('apiautopilot.settings.' . Post::class . '.database_file_url', 'featured_image_url');
         Storage::fake('public');
         $file1 = UploadedFile::fake()->image('avatar.jpg');
 
@@ -232,8 +232,8 @@ class CreateModelWithRelatedTest extends TestCase
      */
     public function test_it_can_save_the_polymorphic_many_to_many_with_files()
     {
-        config()->set('apiautopilot.settings.'.Image::class.'.database_file_url', 'image_url');
-        config()->set('apiautopilot.settings.'.Post::class.'.database_file_url', 'featured_image_url');
+        config()->set('apiautopilot.settings.' . Image::class . '.database_file_url', 'image_url');
+        config()->set('apiautopilot.settings.' . Post::class . '.database_file_url', 'featured_image_url');
 
         Storage::fake('public');
         $file1 = UploadedFile::fake()->image('avatar.jpg');
@@ -248,16 +248,73 @@ class CreateModelWithRelatedTest extends TestCase
             'images' => [
                 ['image_url' => $file1],
                 ['image_url' => $file2],
-                ['image_url' => $file3], ],
+                ['image_url' => $file3],],
         ]);
         $this
             ->assertDatabaseCount('posts', 16)
             ->assertDatabaseCount('images', 1);
     }
 
+    public function test_it_can_save_the_polymorphic_many_to_many_with_files_and_attach_existing_models()
+    {
+        config()->set('apiautopilot.settings.' . Image::class . '.database_file_url', 'image_url');
+        config()->set('apiautopilot.settings.' . Post::class . '.database_file_url', 'featured_image_url');
+        Image::create([
+            'image_url' => fake()->url,
+            'size' => 1232,
+            'extension' => 'jpg',
+            'original_name' => 'aname.jpg',
+        ]);
+        Image::create([
+            'image_url' => fake()->url,
+            'size' => 1232,
+            'extension' => 'jpg',
+            'original_name' => 'aname.jpg',
+        ]);
+        Storage::fake('public');
+        $file1 = UploadedFile::fake()->image('avatar.jpg');
+
+
+        $this->postJson('/api/aap/post/images', [
+            'title' => 'lorem Ipsum',
+            'body' => 'post body',
+            'user_id' => 2,
+            'featured_image_url' => $file1,
+            'images' => [
+                1, 2,
+            ],
+        ])->assertOk();
+        $this
+            ->assertDatabaseCount('posts', 16)
+            ->assertDatabaseCount('imageables', 2)
+            ->assertDatabaseCount('images', 2);
+    }
+
+    public function test_it_can_attach_polymorphic_many_to_many()
+    {
+        config()->set('apiautopilot.settings.' . Image::class . '.database_file_url', 'image_url');
+        config()->set('apiautopilot.settings.' . Post::class . '.database_file_url', 'featured_image_url');
+        Image::create([
+            'image_url' => fake()->url,
+            'size' => 1232,
+            'extension' => 'jpg',
+            'original_name' => 'aname.jpg',
+        ]);
+        Image::create([
+            'image_url' => fake()->url,
+            'size' => 1232,
+            'extension' => 'jpg',
+            'original_name' => 'aname.jpg',
+        ]);
+        $this->postJson('/api/aap/post/1/images/attach', [
+            'ids' => [1, 2]
+        ])->assertOk();
+        $this->assertDatabaseCount('imageables', 2);
+    }
+
     public function test_it_can_create_an_image_and_attach_a_single_user_to_it()
     {
-        config()->set('apiautopilot.settings.'.Image::class.'.database_file_url', 'image_url');
+        config()->set('apiautopilot.settings.' . Image::class . '.database_file_url', 'image_url');
         Storage::fake('public');
         $file1 = UploadedFile::fake()->image('avatar.jpg');
 
@@ -272,7 +329,7 @@ class CreateModelWithRelatedTest extends TestCase
 
     public function test_it_can_create_an_image_and_attach_a_many_user_to_it()
     {
-        config()->set('apiautopilot.settings.'.Image::class.'.database_file_url', 'image_url');
+        config()->set('apiautopilot.settings.' . Image::class . '.database_file_url', 'image_url');
         Storage::fake('public');
         $file1 = UploadedFile::fake()->image('avatar.jpg');
 
@@ -287,7 +344,7 @@ class CreateModelWithRelatedTest extends TestCase
 
     public function test_it_can_create_a_post_comments_at_the_same_time()
     {
-        config()->set('apiautopilot.settings.'.Post::class.'.database_file_url', 'featured_image_url');
+        config()->set('apiautopilot.settings.' . Post::class . '.database_file_url', 'featured_image_url');
         Storage::fake('public');
         $file1 = UploadedFile::fake()->image('avatar.jpg');
 
