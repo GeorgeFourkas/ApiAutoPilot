@@ -1,5 +1,7 @@
 
-![image](https://apiautopilot.info/assets/images/aap_logo%20_cropped.png)
+<p align="center">
+  <img src="https://apiautopilot.info/assets/images/aap_logo%20_cropped.png">
+</p>
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/apiautopilot/apiautopilot.svg?style=flat-square)](https://packagist.org/packages/apiautopilot/apiautopilot)
 [![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/apiautopilot/apiautopilot/run-tests?label=tests)](https://github.com/GeorgeFourkas/ApiAutoPilot/actions/workflows/run-tests.yml/badge.svg)
