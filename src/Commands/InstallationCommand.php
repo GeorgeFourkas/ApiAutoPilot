@@ -29,7 +29,7 @@ class InstallationCommand extends Command
 
     protected function installMiddlewareToKernel(): static
     {
-        $kernelContent = file_get_contents(app_path('Http\Kernel.php'));
+        $kernelContent = file_get_contents(app_path('Http/Kernel.php'));
         if (! Str::contains($kernelContent, "'modelSearch' =>")) {
             $this->replaceInFile(self::ROUTE_MIDDLEWARE_ARRAY,
                 self::ROUTE_MIDDLEWARE_ARRAY.PHP_EOL.
