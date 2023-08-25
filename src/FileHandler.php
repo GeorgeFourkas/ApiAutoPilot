@@ -22,7 +22,6 @@ class FileHandler
     /**
      * @param  UploadedFile|array  $files
      * @param  Request  $request
-     * @param  Model  $model
      * @return array
      */
     public function __construct(Model $model, string $urlColumn)

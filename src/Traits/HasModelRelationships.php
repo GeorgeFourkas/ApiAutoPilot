@@ -26,8 +26,8 @@ trait HasModelRelationships
                         'model' => (new ReflectionClass($return->getRelated()))->getName(),
                     ];
                 }
-            } catch(\ReflectionException $e) {
-                echo  $e->getMessage();
+            } catch (\ReflectionException $e) {
+                echo $e->getMessage();
             }
         }
 

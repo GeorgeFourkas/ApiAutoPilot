@@ -11,7 +11,7 @@ class FileUrlDatabaseColumnIndexNotPresent extends \Exception
 
     use HasDevOrTestingResponse;
 
-    public function __construct(string $columnUrl, string $message = '', int $code = 0, ?Throwable $previous = null)
+    public function __construct(string $columnUrl, string $message = '', int $code = 0, Throwable $previous = null)
     {
         $this->columnUrl = $columnUrl;
         parent::__construct($message, $code, $previous);

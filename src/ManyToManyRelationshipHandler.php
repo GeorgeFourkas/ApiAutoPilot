@@ -12,36 +12,20 @@ use Illuminate\Support\Arr;
 
 class ManyToManyRelationshipHandler
 {
-    /**
-     * @var array|bool
-     */
     protected array|bool $relationExists;
 
-    /**
-     * @var array
-     */
     protected array $relations;
 
-    /**
-     * @var Request
-     */
     protected Request $request;
 
-    /**
-     * @var Model
-     */
     protected Model $model;
 
-    /**
-     * @var int
-     */
     private int $modelId;
 
     use HasResponse;
     use HasPivotKeys;
 
     /**
-     * @param  Request  $aRequest
      * @return $this
      */
     public function setRequest(Request $aRequest): static
@@ -54,7 +38,6 @@ class ManyToManyRelationshipHandler
     }
 
     /**
-     * @param  Model  $aModel
      * @return $this
      */
     public function setModelClass(Model $aModel): static
@@ -65,7 +48,6 @@ class ManyToManyRelationshipHandler
     }
 
     /**
-     * @param $id
      * @return $this
      */
     public function setModelID($id): static
@@ -75,10 +57,6 @@ class ManyToManyRelationshipHandler
         return $this;
     }
 
-    /**
-     * @param  array  $someRelations
-     * @return void
-     */
     protected function setModelRelations(array $someRelations): void
     {
         $this->relations = $someRelations;
@@ -111,7 +89,6 @@ class ManyToManyRelationshipHandler
     }
 
     /**
-     * @param  Model  $model
      * @return $this
      */
     public function detachFrom(Model $model): static

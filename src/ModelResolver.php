@@ -18,7 +18,7 @@ class ModelResolver
 
     protected array $relations;
 
-    protected string|null $relatedModelRouteParam;
+    protected ?string $relatedModelRouteParam;
 
     protected Request $request;
 
@@ -26,7 +26,7 @@ class ModelResolver
 
     protected int $id;
 
-    public function setRelatedFunctionNameFromSecondaryParam(string|null $relatedModelRouteParam): static
+    public function setRelatedFunctionNameFromSecondaryParam(?string $relatedModelRouteParam): static
     {
         $this->relatedModelRouteParam = $relatedModelRouteParam;
 
