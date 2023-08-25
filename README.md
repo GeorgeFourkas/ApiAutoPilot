@@ -8,8 +8,6 @@
 
 ### **Api Auto Pilot** is laravel package that makes the procecess of creating laravel RESTful APIs a breeze!
 
-Make sure to check the [Documentation](http://apiautopilot.info/) Website of the package for more information about the package
-
 
 ## Installation
 
