@@ -7,7 +7,6 @@ use Illuminate\Http\UploadedFile;
 interface FileManipulation
 {
     /**
-     * @param  UploadedFile  $file
      * @return array
      */
     public function setAdditionalFileData(UploadedFile $file);

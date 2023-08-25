@@ -30,11 +30,11 @@ class Constants
 
     const DELETE_METHOD_NAME = 'DELETE';
 
-//    const HAS_ONE = "HasOne";
-//    const HAS_MANY = "HasMany";
-//    const MORPH_ONE = "MorphOne";
-//    const BELONGS_TO = "BelongsTo";
-//    const BELONGS_TO_MANY = "BelongsToMany";
+    //    const HAS_ONE = "HasOne";
+    //    const HAS_MANY = "HasMany";
+    //    const MORPH_ONE = "MorphOne";
+    //    const BELONGS_TO = "BelongsTo";
+    //    const BELONGS_TO_MANY = "BelongsToMany";
 
     public const IS_ELIGIBLE_FOR_ATTACH = [
         self::BELONGS_TO_MANY,

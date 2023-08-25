@@ -132,9 +132,9 @@ class CreateMany implements CreateModel
             $created->{$this->related->getFunctionName()}()
                 ->create($values);
         } else {
-//            $created->{$this->related
-//                ->getFunctionName()}()
-//                ->createMany($values);
+            //            $created->{$this->related
+            //                ->getFunctionName()}()
+            //                ->createMany($values);
             foreach ($values as $key => $value) {
                 $created
                     ->{$this->related->getFunctionName()}()

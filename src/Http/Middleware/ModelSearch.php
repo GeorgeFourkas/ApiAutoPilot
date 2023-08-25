@@ -48,7 +48,7 @@ class ModelSearch
     /**
      * @throws \ReflectionException
      */
-    protected function getRelationshipsReturnType($class, $method): string|null
+    protected function getRelationshipsReturnType($class, $method): ?string
     {
         $reflection = new \ReflectionMethod($class, $method);
 
